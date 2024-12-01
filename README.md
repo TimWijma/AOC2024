@@ -1,2 +1,2 @@
-# AOC2023
-My solutions for Advent of Code 2023 in TypeScript
+# AOC2024
+My solutions for Advent of Code 2024 in TypeScript
