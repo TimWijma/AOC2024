@@ -7,7 +7,16 @@ const reports = input.map((line) =>
 );
 
 const createReduced = (report: number[]) => {
-    return report.slice(1).map((n, i) => report[i - 1] - n);
+    let reducedReport: number[] = [];
+    for (let i = 1; i < report.length; i++) {
+        let prevNum = report[i - 1];
+        let currNum = report[i];
+        let diff = prevNum - currNum;
+
+        reducedReport.push(diff);
+    }
+
+    return reducedReport;
 };
 
 let reducedReports = reports.map((r) => createReduced(r));
