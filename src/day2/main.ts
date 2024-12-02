@@ -7,16 +7,7 @@ const reports = input.map((line) =>
 );
 
 const createReduced = (report: number[]) => {
-    let reducedReport: number[] = [];
-    for (let i = 1; i < report.length; i++) {
-        let prevNum = report[i - 1];
-        let currNum = report[i];
-        let diff = prevNum - currNum;
-
-        reducedReport.push(diff);
-    }
-
-    return reducedReport;
+    return report.slice(1).map((n, i) => report[i - 1] - n);
 };
 
 let reducedReports = reports.map((r) => createReduced(r));
@@ -50,10 +41,13 @@ const part2 = () => {
 
 const isSafe = (report: number[]) => {
     let valid = report.every((n) => Math.abs(n) < 4 && n !== 0);
-    let asc = report.every((n) => n > 0);
-    let desc = report.every((n) => n < 0);
+    if (!valid) return false;
 
-    return valid && (asc || desc);
+    let asc = report.every((n) => n > 0);
+    if (asc) return true;
+
+    let desc = report.every((n) => n < 0);
+    return desc;
 };
 
 const removeAtIndex = (a: number[], i: number) => {
