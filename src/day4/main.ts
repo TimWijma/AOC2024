@@ -14,25 +14,18 @@ const part1 = () => {
                     let newY = y + i;
                     let newX = x + j;
 
-                    if (outOfBounds(newX, newY)) continue;
-                    let neighbour = input[newY][newX];
-                    if (neighbour !== "M") continue;
+                    for (let n = 0; n < 3; n++) {
+                        if (
+                            outOfBounds(newX, newY) ||
+                            input[newY][newX] !== "MAS"[n]
+                        )
+                            break;
 
-                    newY += i;
-                    newX += j;
+                        newY += i;
+                        newX += j;
 
-                    if (outOfBounds(newX, newY)) continue;
-                    neighbour = input[newY][newX];
-                    if (neighbour !== "A") continue;
-
-                    newY += i;
-                    newX += j;
-
-                    if (outOfBounds(newX, newY)) continue;
-                    neighbour = input[newY][newX];
-                    if (neighbour !== "S") continue;
-
-                    xmas++;
+                        if (n === 2) xmas++;
+                    }
                 }
             }
         }
@@ -45,27 +38,13 @@ const part2 = () => {
     let xmas = 0;
     for (let y = 1; y < input.length - 1; y++) {
         for (let x = 1; x < input[y].length - 1; x++) {
-            let letter = input[y][x];
-            if (letter !== "A") continue;
+            if (input[y][x] !== "A") continue;
 
-            let neighbours = [
-                input[y - 1][x - 1],
-                input[y - 1][x + 1],
-                input[y + 1][x + 1],
-                input[y + 1][x - 1],
-            ];
+            let neighboursOne = [input[y - 1][x - 1], input[y + 1][x + 1]].sort();
+            let neighboursTwo = [input[y - 1][x + 1], input[y + 1][x - 1]].sort();
 
-            let neighbours_sorted = [...neighbours].sort();
-            if (
-                neighbours_sorted[0] !== "M" ||
-                neighbours_sorted[1] !== "M" ||
-                neighbours_sorted[2] !== "S" ||
-                neighbours_sorted[3] !== "S"
-            ) {
-                continue
-            }
-
-            if (neighbours[0] === neighbours[2] || neighbours[1] === neighbours[3]) continue;
+            if (neighboursOne[0] !== "M" || neighboursOne[1] !== "S") continue;
+            if (neighboursTwo[0] !== "M" || neighboursTwo[1] !== "S") continue;
 
             xmas++;
         }
