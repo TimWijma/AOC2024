@@ -2,22 +2,17 @@ import { readFile, printResult, removeAtIndex } from "../../helpers";
 
 const input = readFile("input.txt");
 
-const equations: [number, number[]][] = [];
-for (let line of input) {
+const equations: [number, number[]][] = input.map((line) => {
     let split = line.split(": ");
-    let equation = parseInt(split[0]);
-    let numbers = split[1].split(" ").map((n) => parseInt(n));
-    equations.push([equation, numbers]);
-}
+    return [parseInt(split[0]), split[1].split(" ").map((n) => parseInt(n))];
+});
 
 const add = (a: number, b: number) => {
     return a + b;
 };
-
 const multiply = (a: number, b: number) => {
     return a * b;
 };
-
 const concat = (a: number, b: number) => {
     return parseInt(`${a}${b}`);
 };
@@ -26,8 +21,11 @@ const calculateSum = (
     target: number,
     numbers: number[],
     index: number = 0,
-    currentResult: number = numbers[0]
+    currentResult: number = numbers[0],
+    part2 = false
 ): boolean => {
+    if (currentResult > target) return false;
+
     if (index === numbers.length - 1 || numbers.length < 1) {
         return currentResult === target;
     }
@@ -36,33 +34,48 @@ const calculateSum = (
         target,
         numbers,
         index + 1,
-        add(currentResult, numbers[index + 1])
+        add(currentResult, numbers[index + 1]),
+        part2
     );
+
+    if (addition) return true;
+
     let multiplication = calculateSum(
         target,
         numbers,
         index + 1,
-        multiply(currentResult, numbers[index + 1])
+        multiply(currentResult, numbers[index + 1]),
+        part2
     );
+
+    if (multiplication) return true;
+
+    if (!part2) return false;
 
     let concatNumbers = removeAtIndex([...numbers], index + 1);
     let concatenation = calculateSum(
         target,
         concatNumbers,
         index,
-        concat(currentResult, numbers[index + 1])
+        concat(currentResult, numbers[index + 1]),
+        part2
     );
 
-    return addition || multiplication || concatenation;
+    return concatenation;
 };
 
 const part1 = () => {
-    let sum = 0;
-    for (let [equation, numbers] of equations) {
-        if (calculateSum(equation, numbers)) sum += equation;
-    }
-
-    return sum;
+    return equations
+        .filter(([equation, numbers]) => calculateSum(equation, numbers))
+        .reduce((ps, [equation]) => ps + equation, 0);
 };
 
-printResult(part1);
+const part2 = () => {
+    return equations
+        .filter(([equation, numbers]) =>
+            calculateSum(equation, numbers, 0, numbers[0], true)
+        )
+        .reduce((ps, [equation]) => ps + equation, 0);
+};
+
+printResult(part1, part2);
