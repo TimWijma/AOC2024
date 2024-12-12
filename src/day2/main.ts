@@ -1,4 +1,4 @@
-import { readFile, printResult } from "../../helpers";
+import { readFile, printResult, removeAtIndex } from "../../helpers";
 
 const input = readFile("input.txt");
 
@@ -57,13 +57,6 @@ const isSafe = (report: number[]) => {
 
     let desc = report.every((n) => n < 0);
     return desc;
-};
-
-const removeAtIndex = (a: number[], i: number) => {
-    let firstHalf = a.slice(0, i);
-    let secondHalf = a.slice(i + 1);
-
-    return firstHalf.concat(secondHalf);
 };
 
 printResult(part1, part2);

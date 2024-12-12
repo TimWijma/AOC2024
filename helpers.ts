@@ -19,3 +19,10 @@ export const printResult = (
     console.log("Part 2: ", part2());
     console.timeEnd("Execution time");
 };
+
+export const removeAtIndex = (a: number[], i: number) => {
+    let firstHalf = a.slice(0, i);
+    let secondHalf = a.slice(i + 1);
+
+    return firstHalf.concat(secondHalf);
+};
