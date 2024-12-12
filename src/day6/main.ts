@@ -3,7 +3,8 @@ import { readFile, printResult } from "../../helpers";
 const input = readFile("input.txt");
 
 const map = input.map((line) => line.split(""));
-console.log(map);
+
+const directions = [0, 1, 0, -1];
 
 const createMap = () => {
     let inputCopy = [...input];
@@ -14,14 +15,7 @@ const outOfBounds = (x: number, y: number) => {
     return y < 0 || y > map.length - 1 || x < 0 || x > map[y].length - 1;
 };
 
-const turn = (
-    x: number,
-    y: number,
-    xDir: number,
-    yDir: number,
-) => {
-    const directions = [0, 1, 0, -1];
-
+const turn = (x: number, y: number, xDir: number, yDir: number) => {
     let newXDir = (xDir + 1) % 4;
     let newYDir = (yDir + 1) % 4;
     let newX = x + directions[newXDir];
@@ -40,7 +34,6 @@ const part1 = () => {
     let currentY = guardY;
     let currentX = guardX;
 
-    let directions = [0, 1, 0, -1];
     let xIndex = 0;
     let yIndex = 3;
     while (!outOfBounds(currentX, currentY)) {
@@ -56,8 +49,7 @@ const part1 = () => {
                 currentX,
                 currentY,
                 xIndex,
-                yIndex,
-                true
+                yIndex
             );
         }
 
@@ -83,22 +75,12 @@ const part2 = () => {
             let currentY = guardY;
             let currentX = guardX;
 
-            let directions = [0, 1, 0, -1];
             let xIndex = 0;
             let yIndex = 3;
-            let count = 0;
             let visited: Set<String> = new Set();
             outerLoop: while (!outOfBounds(currentX, currentY)) {
-                // map[currentY][currentX] = count.toString();
-                map[currentY][currentX] = "X";
-                count++;
-
                 let tempX = currentX + directions[xIndex];
                 let tempY = currentY + directions[yIndex];
-
-                if (y === 8 && x == 7) {
-                    // console.log("e");
-                }
 
                 if (outOfBounds(tempX, tempY)) break;
 
@@ -107,20 +89,12 @@ const part2 = () => {
                         currentX,
                         currentY,
                         xIndex,
-                        yIndex,
-                        true
+                        yIndex
                     );
-
-                    // console.log(x, y);
-                    if (x === 3 && y === 6 ) {
-                        console.log("e");
-                        
-                    }
 
                     let positionIndex = `${tempX},${tempY},${xIndex},${yIndex}`;
                     if (visited.has(positionIndex)) {
                         loops++;
-
                         break outerLoop;
                     }
                     visited.add(positionIndex);
